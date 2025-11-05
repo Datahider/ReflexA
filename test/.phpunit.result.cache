@@ -1,0 +1,1 @@
+{"version":1,"defects":{"SimpleQueryTest::testSimpleQuery":8,"ComplexQueryTest::testConstructor":8},"times":{"SimpleQueryTest::testSimpleQuery":10.432,"ComplexQueryTest::testConstructor":0.001}}

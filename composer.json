@@ -1,0 +1,22 @@
+{
+    "name": "losthost/reflex-a",
+    "description": "Description of project ReflexA.",
+    "authors": [
+        {
+            "name": "drweb",
+            "email": "pio@pio.su"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^11",
+        "deepseek-php/deepseek-php-client": "^2",
+        "guzzlehttp/guzzle": "^7",
+        "losthost/db": "3.0.13-beta"
+    },
+    "autoload": {
+        "psr-4": {
+            "losthost\\ReflexA\\": "src/"
+        }
+    }
+    
+}
