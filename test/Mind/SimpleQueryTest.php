@@ -8,8 +8,7 @@ class SimpleQueryTest extends TestCase {
     
     public function testSimpleQuery() : void {
         $simple_query = new SimpleQuery('test');
-        $response = $simple_query->query('Как тебя зовут?');
-        $this->assertIsString($response);
-        error_log($response);
+        $response = json_decode($simple_query->query('Как тебя зовут?'));
+        $this->assertStringContainsString('DeepSeek', $response->choices[0]->message->content);
     }
 }

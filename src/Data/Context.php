@@ -10,7 +10,7 @@ class Context extends DBObject {
         'id' => 'BIGINT NOT NULL AUTO_INCREMENT',
         'user' => 'BIGINT NOT NULL',
         'role' => 'ENUM("user", "assistant")',
-        'message' => 'TEXT',
+        'content' => 'TEXT',
         'date_time' => 'DATETIME NOT NULL',
         'PRIMARY KEY' => 'id'
     ];

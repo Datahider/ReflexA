@@ -2,7 +2,9 @@
 
 namespace losthost\ReflexA\Data;
 
-class Prompt {
+use losthost\DB\DBObject;
+
+class Prompt extends DBObject {
     
     const METADATA = [
         'id' => 'BIGINT NOT NULL AUTO_INCREMENT',

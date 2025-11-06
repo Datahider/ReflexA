@@ -14,10 +14,10 @@ class ComplexQuery extends AbstractQuery {
         $api = DeepSeekClient::build($this->getConfig('api_key'));
         
         foreach ($query as $index => $message) {
-            if (empty($message['role']) || empty($message['text'])) {
+            if (empty($message['role']) || empty($message['content'])) {
                 throw new \Exception("Wrong context format ($index). Must contain 'role' and 'text'.");
             }
-            $api->query($message['text'], $message['role']);
+            $api->query($message['content'], $message['role']);
         }
         
         $response = $api->run();
