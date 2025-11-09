@@ -8,12 +8,12 @@ class UserQueryTest extends TestCase {
     
     public function testQuery() {
         
-        $reflexa = new ReflexA();
+        $reflexa = new ReflexA(0);
        
         $filter = new UserQuery(0);
         $response = $filter->query(<<<FIN
                 Привет! Я Вася, а ты кто?
-                FIN);
+                FIN, 0.1);
         
         $result = $response->choices[0]->message->content;
         $this->assertEquals('', $result);

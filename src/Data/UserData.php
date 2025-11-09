@@ -9,6 +9,7 @@ class UserData extends DBObject {
     const METADATA = [
         'id' => 'BIGINT NOT NULL',
         'prompt_id' => 'BIGINT',
-        'context_start' => 'DATETIME'
+        'context_start' => 'DATETIME',
+        'PRIMARY KEY' => 'id'
     ];
 }

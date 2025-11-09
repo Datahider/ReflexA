@@ -15,6 +15,23 @@ class UserQuery extends AbstractUserQuery {
         return 'main';
     }
 
+    public function query(string $query, array $metadata=[]) {
+        
+        $metadata_block = '';
+        foreach ($metadata as $key=>$value) {
+            $metadata_block .= "> $key: $value\n";
+        }
+        
+        error_log($metadata_block);
+        
+        $metadata_added = <<<FIN
+                $query
+
+                $metadata_block
+                FIN;
+        return parent::query($metadata_added);
+    }
+    
     protected function makeContext(): array {
         $user_data = new UserData(['id' => $this->user_id], true);
 

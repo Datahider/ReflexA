@@ -7,10 +7,82 @@ use losthost\ReflexA\Data\Context;
 use losthost\ReflexA\Data\Prompt;
 use losthost\ReflexA\Data\UserData;
 
+use losthost\ReflexA\Mind\InputFilter;
+use losthost\ReflexA\Mind\UserQuery;
+use losthost\ReflexA\Mind\OutputFilter;
+
 class ReflexA {
 
-    public function __construct() {
+    protected $user_id;
+    
+    public function __construct(int $user_id) {
+        $this->user_id = $user_id;
+        
         $this->initDB();
+    }
+    
+    public function query(string $query) : string {
+        
+        $now = date_create();
+        
+        $user_data = new UserData(['id' => $this->user_id], true);
+        if ($user_data->context_start === null) {
+            $user_data->context_start = $now;
+            $user_data->write();
+        }
+        
+        $context_item_user = new Context();
+        $context_item_user->user = $this->user_id;
+        $context_item_user->role = 'user';
+        $context_item_user->content = $query;
+        $context_item_user->date_time = $now;
+
+        $ifilter = new InputFilter($this->user_id);
+        $ifilter_response = $ifilter->query($query);
+        $risk_score = (float) $ifilter_response->choices[0]->message->content;
+        $metadata = ['risk_score' => $risk_score];
+        
+        $main = new UserQuery($this->user_id);
+        
+        while (true) {
+            $main_response = $main->query($query, $metadata);
+            $answer = $main_response->choices[0]->message->content;
+
+            error_log($answer);
+            
+            $ofilter = new OutputFilter($this->user_id);
+            $ofilter_response = $ofilter->query(<<<FIN
+                    ## ПОЛЬЗОВАТЕЛЬ:
+                    $query
+
+                    ## НИКА:
+                    $answer
+                    FIN);
+
+            $ofilter_result = $ofilter_response->choices[0]->message->content;
+            $m = [];
+            if (preg_match("/^\[OK\]/", $ofilter_result)) {
+                break;
+            } elseif (preg_match("/^\[ERROR\]\s(.*)/", $ofilter_result, $m)) {
+                $metadata['error'] = $m[1];
+                error_log($ofilter_result);
+            } else {
+                $answer = $ofilter_result;
+                error_log($ofilter_result);
+                break;
+            }
+        }
+        
+        $context_item_assistant = new Context();
+        $context_item_assistant->user = $this->user_id;
+        $context_item_assistant->role = 'assistant';
+        $context_item_assistant->content = $answer;
+        $context_item_assistant->date_time = date_create();
+      
+        $context_item_user->write();
+        $context_item_assistant->write();
+        
+        return $answer;
     }
     
     protected function initDB() {
