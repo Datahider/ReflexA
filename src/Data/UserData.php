@@ -7,7 +7,7 @@ use losthost\DB\DBObject;
 class UserData extends DBObject {
     
     const METADATA = [
-        'id' => 'BIGINT NOT NULL',
+        'id' => 'VARCHAR(50) NOT NULL',
         'prompt_id' => 'BIGINT',
         'context_start' => 'DATETIME',
         'PRIMARY KEY' => 'id'
