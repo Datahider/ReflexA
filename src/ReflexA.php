@@ -17,8 +17,6 @@ class ReflexA {
     
     public function __construct(int $user_id) {
         $this->user_id = $user_id;
-        
-        $this->initDB();
     }
     
     public function query(string $query) : string {
@@ -85,7 +83,7 @@ class ReflexA {
         return $answer;
     }
     
-    protected function initDB() {
+    static public function initDB() {
         $db = static::getConfig('db');
         DB::connect($db->host, $db->user, $db->pass, $db->name, $db->prefix);
         Context::initDataStructure();
