@@ -45,7 +45,7 @@ class ReflexA {
         while (true) {
             $main_response = $main->query($query, $metadata);
             if (isset($main_response->error)) {
-                $answer = "Ошибка генерации:\n$main_response->description";
+                $answer = "Ошибка генерации:\n$main_response->message\n$main_response->description";
                 break;
             } else {
                 $answer = $main_response->choices[0]->message->content;

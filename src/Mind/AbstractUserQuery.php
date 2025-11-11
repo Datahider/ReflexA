@@ -27,7 +27,8 @@ abstract class AbstractUserQuery {
         } else {
             $response = (object)[
                 'error' => true,
-                'description' => $api->getLastError()
+                'message' => $api->getLastError()->getMessage(),
+                'description' => $api->getLastError()->getDescription(),
             ];
         }
         
