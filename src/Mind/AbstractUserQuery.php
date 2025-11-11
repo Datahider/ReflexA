@@ -19,10 +19,18 @@ abstract class AbstractUserQuery {
         $context[] = ['role' => 'user', 'content' => $query];
         
         $api = new ComplexQuery($this->agentName());
+        $response_json = $api->query($context);
         
-        $response = json_decode($api->query($context));
+        if ($response_json) {
+            $response = json_decode($response_json);
+            $this->postProcess($response);
+        } else {
+            $response = (object)[
+                'error' => true,
+                'description' => $api->getLastError()
+            ];
+        }
         
-        $this->postProcess($response);
         return $response;
     }
 }
