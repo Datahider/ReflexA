@@ -44,31 +44,37 @@ class ReflexA {
         
         while (true) {
             $main_response = $main->query($query, $metadata);
-            $answer = $main_response->choices[0]->message->content;
+            if (isset($main_response->error)) {
+                $answer = "Ошибка генерации:\n$main_response->description";
+                break;
+            } else {
+                $answer = $main_response->choices[0]->message->content;
+
+                $ofilter = new OutputFilter($this->user_id);
+                $ofilter_response = $ofilter->query(<<<FIN
+                        ## ПОЛЬЗОВАТЕЛЬ:
+                        $query
+
+                        ## НИКА:
+                        $answer
+                        FIN);
+
+                $ofilter_result = $ofilter_response->choices[0]->message->content;
+                $m = [];
+                if (preg_match("/^\[OK\]/", $ofilter_result)) {
+                    break;
+                } elseif (preg_match("/^\[ERROR\]\s(.*)/", $ofilter_result, $m)) {
+                    $metadata['error'] = $m[1];
+                    error_log($ofilter_result);
+                } else {
+                    $answer = $ofilter_result;
+                    error_log($ofilter_result);
+                    break;
+                }
+            }
 
             error_log($answer);
             
-            $ofilter = new OutputFilter($this->user_id);
-            $ofilter_response = $ofilter->query(<<<FIN
-                    ## ПОЛЬЗОВАТЕЛЬ:
-                    $query
-
-                    ## НИКА:
-                    $answer
-                    FIN);
-
-            $ofilter_result = $ofilter_response->choices[0]->message->content;
-            $m = [];
-            if (preg_match("/^\[OK\]/", $ofilter_result)) {
-                break;
-            } elseif (preg_match("/^\[ERROR\]\s(.*)/", $ofilter_result, $m)) {
-                $metadata['error'] = $m[1];
-                error_log($ofilter_result);
-            } else {
-                $answer = $ofilter_result;
-                error_log($ofilter_result);
-                break;
-            }
         }
         
         $context_item_assistant = new Context();
