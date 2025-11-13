@@ -13,9 +13,9 @@ use losthost\ReflexA\Mind\OutputFilter;
 
 class ReflexA {
 
-    protected $user_id;
+    protected string $user_id;
     
-    public function __construct(int $user_id) {
+    public function __construct(string $user_id) {
         $this->user_id = $user_id;
     }
     

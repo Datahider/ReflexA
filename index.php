@@ -1,6 +1,7 @@
 <?php
 
 use losthost\ReflexA\ReflexA;
+use losthost\ReflexA\Mind\SimpleAgent;
 
 require 'vendor/autoload.php';
 ReflexA::initDB();
@@ -8,13 +9,18 @@ ReflexA::initDB();
 
 echo '> ';
 
-$reflexa = new \losthost\ReflexA\ReflexA(0);
+$agent = new SimpleAgent(0, 'main');
 
 while ($s = readline()) {
-    $answer = $reflexa->query($s);
-    echo <<<FIN
-        $answer
-        
-        > 
-        FIN;
+    $answer = $agent->query($s);
+    
+    if (!$agent->hasError()) {
+        echo <<<FIN
+            $answer
+
+            > 
+            FIN;
+    } else {
+        echo 'Error: '. $agent->getLastError()->getMessage();
+    }
 }
