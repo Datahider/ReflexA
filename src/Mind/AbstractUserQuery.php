@@ -33,6 +33,8 @@ abstract class AbstractUserQuery {
             
             $this->user_agent_data->prompt_id = $prompt->id;
             $this->user_agent_data->write();
+            
+            $this->last_error = null;
         }
         
         $this->api = new ComplexQuery($this->agent_name);
@@ -68,6 +70,9 @@ abstract class AbstractUserQuery {
     }
     
     public function query(string $query) : false|string {
+        
+        $this->last_error = null;
+        
         $this->addContext($query);
         $context = $this->getContext($query);
         
