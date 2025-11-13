@@ -5,7 +5,7 @@ namespace losthost\ReflexA;
 use losthost\DB\DB;
 use losthost\ReflexA\Data\Context;
 use losthost\ReflexA\Data\Prompt;
-use losthost\ReflexA\Data\UserData;
+use losthost\ReflexA\Data\UserAgentData;
 
 use losthost\ReflexA\Mind\InputFilter;
 use losthost\ReflexA\Mind\UserQuery;
@@ -94,7 +94,7 @@ class ReflexA {
         DB::connect($db->host, $db->user, $db->pass, $db->name, $db->prefix);
         Context::initDataStructure();
         Prompt::initDataStructure();
-        UserData::initDataStructure();
+        UserAgentData::initDataStructure();
     }
     
     static public function getConfig(string $section, ?string $param_name=null) : mixed {
